@@ -1,0 +1,14 @@
+# experiment environment
+# OS : Windows Subsystem for Linux (Ubuntu 18.04 / Installed in Windows 10)
+# CPU : Intel i7-8750H @ 2.20GHz (6 cores)
+
+# original
+Average elapsed time: 1369.99932386
+Average #recursive calls: 1022702.40909
+#Solved queries: 88
+
+# hw3_first
+Average elapsed time: 1.75628863636
+Average #recursive calls: 222.363636364
+#Solved queries: 95
+
