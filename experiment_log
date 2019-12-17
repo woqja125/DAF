@@ -8,7 +8,11 @@ Average #recursive calls: 1022702.40909
 #Solved queries: 88
 
 # hw3_first
-Average elapsed time: 1.75628863636
-Average #recursive calls: 222.363636364
-#Solved queries: 95
+Average elapsed time: 593.356455294
+Average #recursive calls: 139166.835294
+#Solved queries: 85
 
+# hw3_second
+Average elapsed time: 2435.15638023
+Average #recursive calls: 1538357.69767
+#Solved queries: 86

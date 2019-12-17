@@ -6,12 +6,11 @@
 #include <queue>
 #include <tuple>
 #include <cstring>
-#include <cassert>
 
 using namespace std;
 
 const int N = 3112, M = 400;
-vector<int> de[N], e[M], r;
+vector<int> de[N], adj_deg[N], adj_c[N], e[M], r;
 int dc[N], c[M], w[M], v[M];
 
 void read_data_graph(ifstream &fin){
@@ -38,6 +37,22 @@ void read_data_graph(ifstream &fin){
 	}
 }
 
+void precalc(){
+	for(int i = 0; i < N; i++){
+		for(int j : de[i]){
+			adj_deg[i].push_back(de[j].size());
+			adj_c[i].push_back(dc[j]);
+		}
+		sort(adj_deg[i].rbegin(), adj_deg[i].rend());
+		sort(adj_c[i].begin(), adj_c[i].end());
+	}
+}
+
+void build_data_graph(ifstream &fin){
+	read_data_graph(fin);
+	precalc();
+}
+
 void init(){
 	for(int i = 0; i < M; i++) e[i].clear();
 	r.clear();
@@ -61,8 +76,29 @@ void read_query_graph(ifstream &fin){
 	}
 }
 
+bool suitable(int qx, int dx){
+	if(c[qx] != dc[dx] || e[qx].size() > de[dx].size()) return false;
+	
+	vector<int> v;
+	for(int i : e[qx]) v.push_back(e[i].size());
+	sort(v.rbegin(), v.rend());
+	for(int i = 0; i < v.size(); i++) if(v[i] > adj_deg[dx][i]) return false;
+	
+	v.clear();
+	for(int i : e[qx]) v.push_back(c[i]);
+	sort(v.begin(), v.end());
+	for(int i = 0, j = 0; i < v.size(); i++){
+		while(j < adj_c[dx].size() && adj_c[dx][j] != v[i]) j++;
+		if(j == adj_c[dx].size()) return false;
+	}
+
+	return true;
+}
+
 void calc_weight(){
-	for(int i = 0; i < M; i++) w[i] = e[i].size();
+	for(int i = 0; i < M; i++){
+		for(int j = 0; j < N; j++) if(!suitable(i, j)) w[i]++;
+	}
 }
 
 void greedy_bfs(){
@@ -110,7 +146,7 @@ int main(int argc, char *argv[]){
 	ifstream qry_in(argv[2]);
 	int qry_n = atoi(argv[3]);
 
-	read_data_graph(data_in);
+	build_data_graph(data_in);
 	for(int i = 0; i < qry_n; i++) build_query_graph(qry_in);
 
 	data_in.close();
